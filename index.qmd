@@ -36,6 +36,12 @@ code-annotations: below
 bibliography: references.bib
 ---
 
+::: {.callout-warning}
+**Version note:** An earlier version of this lab used a house-elevation model instead of the dike model below.
+If you already started working from that version, that's fine — keep working with the one you have on your computer.
+Both versions cover the same concepts (Pareto fronts, NSGA-II, static vs. adaptive policies).
+:::
+
 ## Overview
 
 Monday's lecture used weighted sums to combine objectives — but weights embed value judgments.
@@ -85,12 +91,24 @@ You don't need to modify any of this code — just run it.
 
 ```{julia}
 #| output: false
+# Install SimOptDecisions if needed
 if !isfile("Manifest.toml")
     import Pkg
     Pkg.instantiate()
 end
 
-using SimOptDecisions
+try
+    using SimOptDecisions
+catch
+    import Pkg
+    try
+        Pkg.rm("SimOptDecisions")
+    catch
+    end
+    Pkg.add(; url="https://github.com/dossgollin-lab/SimOptDecisions")
+    Pkg.instantiate()
+    using SimOptDecisions
+end
 using CairoMakie
 using DataFrames
 using Distributions
